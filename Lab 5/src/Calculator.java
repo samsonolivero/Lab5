@@ -137,9 +137,28 @@ public class Calculator
     protected static int execute(String[] tokens) throws NumberFormatException, CalculatorException
     {
         // Condition on the number of tokens (number of strings in user input separated by spaces)
+    	
         switch(tokens.length)
         {
             // TODO: complete this...
+        case 0: 
+        	throw new CalculatorException("Illegal Token Length");
+        	
+        case 1: 
+        	if(tokens[0].equalsIgnoreCase("quit"))
+        		return Integer.MIN_VALUE;
+        	else
+        		throw new CalculatorException("Illegal Command");
+        	
+        case 2: 
+        	return calculateTwoTokens(tokens);
+        	
+        case 3: 
+        	return calculateThreeTokens(tokens);
+        
+        default:
+        	throw new CalculatorException("Illegal Token Length");
+        	
         }
 
     }
@@ -178,6 +197,29 @@ public class Calculator
         // TODO: complete this...
         // Hint: you should try and call execute(). If execute encounters an error, it will throw an exception. This
         // method will catch those exceptions and respond accordingly.
+    	String[] string = input.split(" ");
     	
+    	try
+    	{
+    		int result = execute(string);
+    		
+    		switch(string.length)
+    		{
+    		case 1: return "quit";
+    		case 2: case 3: default: return String.format("The result is: %d", result);
+    		}
+    	}
+    	catch(ArithmeticException e)
+    	{
+    		return "Attempted to divide by 0. Please try again.";
+    	}
+    	catch(NumberFormatException e)
+    	{
+    		return "Input number cannot be parsed to an int. Please try again.";
+    	}
+    	catch(CalculatorException e)
+    	{
+    		return String.format("Calculator Exception, message is: %s", e.getMessage());
+    	}
     }
 }
